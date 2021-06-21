@@ -45,8 +45,8 @@ async def on_message(message):
         embed = discord.Embed(title="Free Games:", color=discord.Color(3038))
 
         for game in webscraper.scraper():
-            embed.add_field(name=game['title'], value=f"Game was: {game['worth']} now is: FREE\n Game link:{game['open_giveaway_url']}" +
-            f"\n{game['description']}\n\n", inline=True)
+            embed.add_field(name=game['title'], value=f"Game was: {game['worth']} now is: FREE\nends on: {game['end_date']}\n Game link:{game['open_giveaway_url']}" +
+                f"\n{game['description']}\n\n", inline=False)
 
             if len(embed) >= 5500:
                 await channel.send(embed=embed)
@@ -59,7 +59,7 @@ async def on_message(message):
 
         for game in webscraper.scraper():
             if game['type'] == 'Full Game':
-                embed.add_field(name=game['title'], value=f"Game was: {game['worth']} now is: FREE\n Game link:{game['open_giveaway_url']}" +
+                embed.add_field(name=game['title'], value=f"Game was: {game['worth']} now is: FREE\nends on: {game['end_date']}\n Game link:{game['open_giveaway_url']}" +
                 f"\n{game['description']}\n\n", inline=False)
                 
                 if len(embed) >= 5500:
@@ -76,7 +76,7 @@ async def on_message(message):
         for game in webscraper.scraper():
 
             if game['type'] == 'Full Game' and message_lowered in game['platforms']:
-                embed.add_field(name=game['title'], value=f"Game was: {game['worth']} now is: FREE\n Game link:{game['open_giveaway_url']}" +
+                embed.add_field(name=game['title'], value=f"Game was: {game['worth']} now is: FREE\nends on: {game['end_date']}\n Game link:{game['open_giveaway_url']}" +
                 f"\n{game['description']}\n\n", inline=False)
 
             if len(embed) >= 5500:
