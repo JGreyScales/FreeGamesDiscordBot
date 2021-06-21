@@ -1,13 +1,13 @@
 from bs4 import BeautifulSoup as bs
 from colorama import Fore
-
 import urllib.request, json
 
+print(f'{Fore.RED}\tSub Imports Initlized {Fore.WHITE}')
 class webscraper():
     def __init__(self):
-        print(f'{Fore.BLUE}\tSub Imports Initlized {Fore.WHITE}')
+        pass
 
     def scraper():
-
-        htmlParse = str(bs(urllib.request.urlopen('https://www.gamerpower.com/api/giveaways?platform=pc'), 'html.parser')).replace('</a>', '')
-        return json.loads(htmlParse)
+        print(f'{Fore.RED}\tRequesting url\n\tConverting Json to Python{Fore.WHITE}')
+        return json.loads(str(bs(urllib.request.urlopen('https://www.gamerpower.com/api/giveaways?platform=pc'), 'html.parser')).replace('</a>', ''))
+        

@@ -1,6 +1,8 @@
-import discord, os
 from colorama import Fore
 from web_scraper.discordwebscraper import webscraper
+
+
+import discord, os, asyncio, random
 
 def print_message_main(str):
     print(Fore.GREEN + str + Fore.WHITE)
@@ -21,8 +23,17 @@ companys = {
 }
 
 @client.event
+async def status_changer():
+    await client.change_presence(activity=discord.Game(name=f'Looking for free games on {random.choice(list(companys.values()))}...\n\t type "{prefix}help" for help'))
+    print_message_main(f'\t\tstatus changed')
+    await asyncio.sleep(60)
+    await status_changer()
+
+
+@client.event
 async def on_ready():
     print_message_main("Signed into: {0.user}".format(client))
+    await status_changer()
 
 @client.event
 async def on_message(message):
@@ -34,15 +45,18 @@ async def on_message(message):
 
     if message_lowered == f'{prefix}help':
         help_embed = discord.Embed(name="Help:", color=discord.Color(7863510))
-        help_embed.set_author(name="2 GreyScales#4533", url="https://github.com/JGreyScales", icon_url="https://cdn.discordapp.com/avatars/554486518543155212/6de70ebdb8796cc55cc9e8397b0985a4.png?size=4096")
+        help_embed.set_author(name="2 GreyScales#4533", url="https://github.com/JGreyScales", icon_url="https://i.imgur.com/KzRorR8.gif")
+        help_embed.add_field(name='Prefix is currently:', value=prefix, inline=False)
         help_embed.add_field(name='Help:', value=f'{prefix}help', inline=False)
-        help_embed.add_field(name='Free:', value=f'{prefix}free products\n{prefix}free games\n{prefix}free steam\n{prefix}free itch\n' +
-        f'{prefix}free pc\n{prefix}free epic\n{prefix}free drm\n{prefix}free battlenet\n{prefix}free gog')
+        help_embed.add_field(name='Free:', value=f'{prefix}free products\n{prefix}free games', inline=False)
+        for company in companys:
+            help_embed.add_field(name=f'Free {company} games:', value=f'{prefix}free {company}\nWill return all free GAMES for {companys[company]}', inline=True)
+        help_embed.set_footer(text='if there are any problems contact 2 GreyScales#4533. I might fix it I might not')
 
         await channel.send(embed=help_embed)
 
     elif message_lowered == f'{prefix}free products':
-        embed = discord.Embed(title="Free Games:", color=discord.Color(3038))
+        embed = discord.Embed(title="Free Products:", color=discord.Color(3038))
 
         for game in webscraper.scraper():
             embed.add_field(name=game['title'], value=f"Game was: {game['worth']} now is: FREE\nends on: {game['end_date']}\n Game link:{game['open_giveaway_url']}" +
@@ -50,7 +64,7 @@ async def on_message(message):
 
             if len(embed) >= 5500:
                 await channel.send(embed=embed)
-                embed = discord.Embed(title="Free Steam Games:", colour=discord.Colour(0x3e038c))
+                embed = discord.Embed(title="Free Products:", colour=discord.Colour(0x3e038c))
         
         await channel.send(embed=embed)
 
@@ -64,7 +78,7 @@ async def on_message(message):
                 
                 if len(embed) >= 5500:
                     await channel.send(embed=embed)
-                    embed = discord.Embed(title="Free Steam Games:", colour=discord.Colour(0x3e038c))
+                    embed = discord.Embed(title="Free Games:", colour=discord.Colour(0x3e038c))
                 
         await channel.send(embed=embed)
 
