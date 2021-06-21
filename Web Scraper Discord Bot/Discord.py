@@ -81,7 +81,7 @@ async def on_message(message):
 
             if len(embed) >= 5500:
                 await channel.send(embed=embed)
-                embed = discord.Embed(title="Free Steam Games:", colour=discord.Colour(0x3e038c))
+                embed = discord.Embed(title=f"Free {message_lowered} Games:", colour=discord.Colour(0x3e038c))
                 
         await channel.send(embed=embed)
 
