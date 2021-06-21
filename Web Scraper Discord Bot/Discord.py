@@ -1,7 +1,5 @@
-from math import trunc
 from colorama import Fore
 from web_scraper.discordwebscraper import webscraper
-from discord.ext import commands
 
 
 import discord, os, asyncio, random
