@@ -1,17 +1,27 @@
+from typing import MutableSequence
 from colorama import Fore
-from web_scraper.discordwebscraper import webscraper
-
+from utils.discordwebscraper import webscraper
+from utils.Admin import admin
+print(f'{Fore.RED}\tSub Imports Initlized {Fore.WHITE}')
 
 import discord, os, asyncio, random
 
 def print_message_main(str):
     print(Fore.GREEN + str + Fore.WHITE)
 
-print_message_main('Main Imports initlized')
 
-prefix = '$$'
+print_message_main('Main Imports Initlized')
 client = discord.Client()
 
+prefix = '$$'
+
+admins = 554486518543155212
+## scuffed coroutine work around, please no judge
+def prefix_shit(message):
+    global prefix
+    old_prefix, prefix = prefix, admin.prefix_change(prefix, message)
+    return old_prefix
+    
 companys = {
     'steam': 'Steam',
     'itch': 'Itch.io',
@@ -21,10 +31,16 @@ companys = {
     'battlenet': 'Battle.net',
     'gog': 'GOG',
 }
+statuses = [f'Type "{prefix}help" for help', 'Doing dumb shit', 'Listening to some busting tunes', 'LUST MONTH LUST MONTH LUST MONTH', 'Vibing', 
+'Single/Depressed/Bullied/Half Demon/Trans/Has A Huge Secret ;)/Quirky/Mysterious/Gay/straight', 'Visual Studio Code', 'Adding a backend...',
+'Stealing server info', 'Pampcakes', 'hehe, A-10 chan go BRRRRRRRRRRRRRRRRTTTTTTT', 'BRRRRRRRRRRRRRRRTTTTTT', 'with your mom']
+
+for item in list(companys.values()):
+    statuses.append('Looking for free games on ' + item)
 
 @client.event
 async def status_changer():
-    await client.change_presence(activity=discord.Game(name=f'Looking for free games on {random.choice(list(companys.values()))}...\n\t type "{prefix}help" for help'))
+    await client.change_presence(activity=discord.Game(name=random.choice(statuses)))
     print_message_main(f'\t\tstatus changed')
     await asyncio.sleep(60)
     await status_changer()
@@ -51,7 +67,7 @@ async def on_message(message):
         help_embed.add_field(name='Free:', value=f'{prefix}free products\n{prefix}free games', inline=False)
         for company in companys:
             help_embed.add_field(name=f'Free {company} games:', value=f'{prefix}free {company}\nWill return all free GAMES for {companys[company]}', inline=True)
-        help_embed.set_footer(text='if there are any problems contact 2 GreyScales#4533. I might fix it I might not')
+        help_embed.set_footer(text='if there are any problems contact 2 GreyScales#4533. I might fix it I might not. All games gathered from GamerPower')
 
         await channel.send(embed=help_embed)
 
@@ -98,5 +114,18 @@ async def on_message(message):
                 embed = discord.Embed(title=f"Free {message_lowered} Games:", colour=discord.Colour(0x3e038c))
                 
         await channel.send(embed=embed)
+
+
+
+    ## admin stuff
+
+    elif message_lowered.startswith(f'{prefix}prefix') and message.author.id == admins:
+        await channel.send(f'Old prefix: {prefix_shit(message_lowered)}\nNew prefix: {prefix}')
+
+    elif message_lowered == f'{prefix}off' and message.author.id == admins:
+        await channel.send('Fuck you ig')
+        print_message_main('Closing')
+        quit()
+
 
 client.run(os.getenv("ToePicDiscordToken"))
